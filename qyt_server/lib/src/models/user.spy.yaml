@@ -1,0 +1,5 @@
+class: User
+table: users
+fields:
+  name: String
+  userInfo: module:auth:UserInfo?, relation(onDelete=Cascade, onUpdate=Cascade)
