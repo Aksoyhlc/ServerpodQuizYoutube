@@ -1,0 +1,13 @@
+class: QuizQuestion
+table: quiz_question
+fields:
+  quiz: Quiz?, relation(name=quiz_questions, onUpdate=Cascade, onDelete=Cascade)
+  question: Question?, relation(name=question_questions_quiz, onUpdate=Cascade, onDelete=Cascade)
+  createdAt: DateTime
+
+
+
+indexes:
+  quiz_questions_index_idx:
+    fields: quizId, questionId
+    unique: true
