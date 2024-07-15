@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qyt_flutter/Const/const.dart';
 import 'package:qyt_flutter/Controllers/State/auth_controller.dart';
+import 'package:qyt_flutter/Controllers/State/drawer_controller.dart';
 import 'package:qyt_flutter/Controllers/State/global_controller.dart';
 import 'package:qyt_flutter/Controllers/State/input_controller.dart';
 
@@ -17,6 +18,9 @@ controllerInjection() {
 
   if (!Get.isRegistered<AuthController>()) {
     Get.put(AuthController());
+  }
+  if (!Get.isRegistered<CustomDrawerController>()) {
+    Get.put(CustomDrawerController());
   }
 }
 

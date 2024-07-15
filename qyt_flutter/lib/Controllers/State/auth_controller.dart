@@ -4,6 +4,7 @@ import 'package:qyt_flutter/Const/const.dart';
 import 'package:qyt_flutter/Controllers/State/global_controller.dart';
 import 'package:qyt_flutter/Extensions/context.dart';
 import 'package:qyt_flutter/Helpers/ext.dart';
+import 'package:qyt_flutter/Views/Admin/Home/home.dart';
 import 'package:serverpod_auth_client/serverpod_auth_client.dart';
 import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
 import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
@@ -62,7 +63,7 @@ class AuthController extends GetxController {
     if (redirect) {
       WidgetsBinding.instance.addPostFrameCallback(
         (timeStamp) {
-          Widget page = Container();
+          Widget page = AdminHomePage();
           context.toRemove(page);
         },
       );

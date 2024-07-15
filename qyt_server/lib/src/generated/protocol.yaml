@@ -1,4 +1,10 @@
 example:
   - hello:
+question:
+  - add:
+  - update:
+  - delete:
+  - getAll:
+  - getById:
 user:
   - userInfoUpdate:
