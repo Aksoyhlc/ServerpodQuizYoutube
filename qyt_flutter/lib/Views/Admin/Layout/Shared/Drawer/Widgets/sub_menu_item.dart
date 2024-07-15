@@ -4,6 +4,7 @@ import 'package:qyt_flutter/Const/const.dart';
 import 'package:qyt_flutter/Extensions/context.dart';
 import 'package:qyt_flutter/Mixins/state_tools.dart';
 import 'package:qyt_flutter/Views/Admin/Question/add_edit.dart';
+import 'package:qyt_flutter/Views/Admin/Question/list.dart';
 
 class SubMenuItem extends StatefulWidget {
   const SubMenuItem({
@@ -29,6 +30,8 @@ class _SubMenuItemState extends State<SubMenuItem> with StateTools {
         onTap: () {
           if (widget.name == "questionAdd") {
             context.to(const QuestionCrud());
+          } else if (widget.name == "questionList") {
+            context.to(const QuestionList());
           }
         },
         child: Container(

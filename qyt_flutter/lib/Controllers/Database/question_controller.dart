@@ -12,23 +12,25 @@ class QuestionDbController
   }
 
   @override
-  Future<(Question?, DbException?)> delete(Question data) {
-    return handleAction(() => gc.client.question.delete(data));
+  Future<(Question?, DbException?)> delete(Question data) async {
+    return await handleAction(() => gc.client.question.delete(data));
   }
 
   @override
-  Future<(List<Question>?, DbException?)> getAll({int? limit, int? offset}) {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<(List<Question>?, DbException?)> getAll(
+      {int? limit, int? offset}) async {
+    return await handleAction(
+      () => gc.client.question.getAll(limit: limit, offset: offset),
+    );
   }
 
   @override
-  Future<(Question?, DbException?)> getById(int data) {
-    return handleAction(() => gc.client.question.getById(data));
+  Future<(Question?, DbException?)> getById(int data) async {
+    return await handleAction(() => gc.client.question.getById(data));
   }
 
   @override
-  Future<(Question?, DbException?)> update(Question data) {
-    return handleAction(() => gc.client.question.update(data));
+  Future<(Question?, DbException?)> update(Question data) async {
+    return await handleAction(() => gc.client.question.update(data));
   }
 }

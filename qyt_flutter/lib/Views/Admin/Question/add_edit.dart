@@ -26,6 +26,7 @@ class _QuestionCrudState extends State<QuestionCrud> with StateTools {
   @override
   void initState() {
     // TODO: implement initState
+    ic.clearAll();
     super.initState();
     question = widget.question;
   }

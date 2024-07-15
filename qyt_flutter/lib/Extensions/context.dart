@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
 extension BuildContextExtenison on BuildContext {
-  to(Widget page, {String? name}) {
-    Navigator.push(
+  Future<dynamic> to(Widget page, {String? name}) async {
+    await Navigator.push(
       this,
       materialPageRoute(page, name),
     );
   }
 
-  toRemove(Widget page, {String? name}) {
-    Navigator.pushAndRemoveUntil(
+  Future<dynamic> toRemove(Widget page, {String? name}) async {
+    await Navigator.pushAndRemoveUntil(
       this,
       materialPageRoute(page, name),
       (route) => false,
     );
   }
 
-  toReplace(Widget page, {String? name}) {
-    Navigator.pushReplacement(
+  toReplace(Widget page, {String? name}) async {
+    await Navigator.pushReplacement(
       this,
       materialPageRoute(page, name),
     );

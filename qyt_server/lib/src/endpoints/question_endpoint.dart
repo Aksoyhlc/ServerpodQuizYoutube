@@ -13,8 +13,9 @@ class QuestionEndpoint extends Endpoint
   }
 
   @override
-  Future<Question?> update(Session session, Question data) {
-    return handleAction(session, () => Question.db.updateRow(session, data));
+  Future<Question?> update(Session session, Question data) async {
+    return await handleAction(
+        session, () => Question.db.updateRow(session, data));
   }
 
   @override
@@ -24,13 +25,29 @@ class QuestionEndpoint extends Endpoint
   }
 
   @override
-  Future<List<Question>?> getAll(Session session, {int? limit, int? offset}) {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<List<Question>?> getAll(Session session,
+      {int? limit, int? offset}) async {
+    return await handleAction(
+      session,
+      () {
+        return Question.db.find(
+          session,
+          limit: limit,
+          offset: offset,
+          orderBy: (e) => e.id,
+          orderDescending: true,
+          include: Question.include(
+            quizs: QuizQuestion.includeList(),
+            categories: CategoryQuestion.includeList(),
+          ),
+        );
+      },
+    );
   }
 
   @override
-  Future<Question?> getById(Session session, int data) {
-    return handleAction(session, () => Question.db.findById(session, data));
+  Future<Question?> getById(Session session, int data) async {
+    return await handleAction(
+        session, () => Question.db.findById(session, data));
   }
 }
