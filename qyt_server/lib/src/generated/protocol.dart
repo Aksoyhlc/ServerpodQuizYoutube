@@ -26,7 +26,8 @@ import 'quiz_result/quiz_result.dart' as _i14;
 import 'quiz_result/quiz_result_type.dart' as _i15;
 import 'user.dart' as _i16;
 import 'protocol.dart' as _i17;
-import 'package:qyt_server/src/generated/question.dart' as _i18;
+import 'package:qyt_server/src/generated/category/category.dart' as _i18;
+import 'package:qyt_server/src/generated/question.dart' as _i19;
 export 'category/category.dart';
 export 'category/category_question.dart';
 export 'db_exception.dart';
@@ -684,6 +685,11 @@ class Protocol extends _i1.SerializationManagerServer {
               .toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
     if (t == _i1.getType<List<_i17.CategoryQuestion>?>()) {
       return (data != null
           ? (data as List)
@@ -705,9 +711,14 @@ class Protocol extends _i1.SerializationManagerServer {
               .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i18.Question>?>()) {
+    if (t == _i1.getType<List<_i18.Category>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i18.Question>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i18.Category>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i19.Question>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i19.Question>(e)).toList()
           : null) as dynamic;
     }
     try {

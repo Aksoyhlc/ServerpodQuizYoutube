@@ -10,10 +10,60 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:qyt_client/src/protocol/question.dart' as _i3;
-import 'package:qyt_client/src/protocol/user.dart' as _i4;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i5;
-import 'protocol.dart' as _i6;
+import 'package:qyt_client/src/protocol/category/category.dart' as _i3;
+import 'package:qyt_client/src/protocol/question.dart' as _i4;
+import 'package:qyt_client/src/protocol/user.dart' as _i5;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i6;
+import 'protocol.dart' as _i7;
+
+/// {@category Endpoint}
+class EndpointCategory extends _i1.EndpointRef {
+  EndpointCategory(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'category';
+
+  _i2.Future<_i3.Category?> add(_i3.Category data) =>
+      caller.callServerEndpoint<_i3.Category?>(
+        'category',
+        'add',
+        {'data': data},
+      );
+
+  _i2.Future<_i3.Category?> delete(_i3.Category data) =>
+      caller.callServerEndpoint<_i3.Category?>(
+        'category',
+        'delete',
+        {'data': data},
+      );
+
+  _i2.Future<List<_i3.Category>?> getAll({
+    int? limit,
+    int? offset,
+  }) =>
+      caller.callServerEndpoint<List<_i3.Category>?>(
+        'category',
+        'getAll',
+        {
+          'limit': limit,
+          'offset': offset,
+        },
+      );
+
+  _i2.Future<_i3.Category?> getById(int data) =>
+      caller.callServerEndpoint<_i3.Category?>(
+        'category',
+        'getById',
+        {'data': data},
+      );
+
+  _i2.Future<_i3.Category?> update(_i3.Category data) =>
+      caller.callServerEndpoint<_i3.Category?>(
+        'category',
+        'update',
+        {'data': data},
+      );
+}
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -36,42 +86,46 @@ class EndpointQuestion extends _i1.EndpointRef {
   @override
   String get name => 'question';
 
-  _i2.Future<_i3.Question?> add(_i3.Question data) =>
-      caller.callServerEndpoint<_i3.Question?>(
+  _i2.Future<_i4.Question?> add(_i4.Question data) =>
+      caller.callServerEndpoint<_i4.Question?>(
         'question',
         'add',
         {'data': data},
       );
 
-  _i2.Future<_i3.Question?> update(_i3.Question data) =>
-      caller.callServerEndpoint<_i3.Question?>(
+  _i2.Future<_i4.Question?> update(_i4.Question data) =>
+      caller.callServerEndpoint<_i4.Question?>(
         'question',
         'update',
         {'data': data},
       );
 
-  _i2.Future<_i3.Question?> delete(_i3.Question data) =>
-      caller.callServerEndpoint<_i3.Question?>(
+  _i2.Future<_i4.Question?> delete(_i4.Question data) =>
+      caller.callServerEndpoint<_i4.Question?>(
         'question',
         'delete',
         {'data': data},
       );
 
-  _i2.Future<List<_i3.Question>?> getAll({
+  _i2.Future<List<_i4.Question>?> getAll({
     int? limit,
     int? offset,
+    int? categoryId,
+    int? quizId,
   }) =>
-      caller.callServerEndpoint<List<_i3.Question>?>(
+      caller.callServerEndpoint<List<_i4.Question>?>(
         'question',
         'getAll',
         {
           'limit': limit,
           'offset': offset,
+          'categoryId': categoryId,
+          'quizId': quizId,
         },
       );
 
-  _i2.Future<_i3.Question?> getById(int data) =>
-      caller.callServerEndpoint<_i3.Question?>(
+  _i2.Future<_i4.Question?> getById(int data) =>
+      caller.callServerEndpoint<_i4.Question?>(
         'question',
         'getById',
         {'data': data},
@@ -85,7 +139,7 @@ class EndpointUser extends _i1.EndpointRef {
   @override
   String get name => 'user';
 
-  _i2.Future<bool> userInfoUpdate(_i4.User user) =>
+  _i2.Future<bool> userInfoUpdate(_i5.User user) =>
       caller.callServerEndpoint<bool>(
         'user',
         'userInfoUpdate',
@@ -95,10 +149,10 @@ class EndpointUser extends _i1.EndpointRef {
 
 class _Modules {
   _Modules(Client client) {
-    auth = _i5.Caller(client);
+    auth = _i6.Caller(client);
   }
 
-  late final _i5.Caller auth;
+  late final _i6.Caller auth;
 }
 
 class Client extends _i1.ServerpodClient {
@@ -116,7 +170,7 @@ class Client extends _i1.ServerpodClient {
     Function(_i1.MethodCallContext)? onSucceededCall,
   }) : super(
           host,
-          _i6.Protocol(),
+          _i7.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -124,11 +178,14 @@ class Client extends _i1.ServerpodClient {
           onFailedCall: onFailedCall,
           onSucceededCall: onSucceededCall,
         ) {
+    category = EndpointCategory(this);
     example = EndpointExample(this);
     question = EndpointQuestion(this);
     user = EndpointUser(this);
     modules = _Modules(this);
   }
+
+  late final EndpointCategory category;
 
   late final EndpointExample example;
 
@@ -140,6 +197,7 @@ class Client extends _i1.ServerpodClient {
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'category': category,
         'example': example,
         'question': question,
         'user': user,

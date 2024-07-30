@@ -19,6 +19,7 @@ abstract class Category extends _i1.TableRow
     required this.name,
     this.image,
     this.questions,
+    this.questionIds,
   }) : super(id);
 
   factory Category({
@@ -26,6 +27,7 @@ abstract class Category extends _i1.TableRow
     required String name,
     String? image,
     List<_i2.CategoryQuestion>? questions,
+    List<String>? questionIds,
   }) = _CategoryImpl;
 
   factory Category.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -36,6 +38,9 @@ abstract class Category extends _i1.TableRow
       questions: (jsonSerialization['questions'] as List?)
           ?.map(
               (e) => _i2.CategoryQuestion.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      questionIds: (jsonSerialization['questionIds'] as List?)
+          ?.map((e) => e as String)
           .toList(),
     );
   }
@@ -50,6 +55,8 @@ abstract class Category extends _i1.TableRow
 
   List<_i2.CategoryQuestion>? questions;
 
+  List<String>? questionIds;
+
   @override
   _i1.Table get table => t;
 
@@ -58,6 +65,7 @@ abstract class Category extends _i1.TableRow
     String? name,
     String? image,
     List<_i2.CategoryQuestion>? questions,
+    List<String>? questionIds,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -67,6 +75,7 @@ abstract class Category extends _i1.TableRow
       if (image != null) 'image': image,
       if (questions != null)
         'questions': questions?.toJson(valueToJson: (v) => v.toJson()),
+      if (questionIds != null) 'questionIds': questionIds?.toJson(),
     };
   }
 
@@ -79,6 +88,7 @@ abstract class Category extends _i1.TableRow
       if (questions != null)
         'questions':
             questions?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (questionIds != null) 'questionIds': questionIds?.toJson(),
     };
   }
 
@@ -120,11 +130,13 @@ class _CategoryImpl extends Category {
     required String name,
     String? image,
     List<_i2.CategoryQuestion>? questions,
+    List<String>? questionIds,
   }) : super._(
           id: id,
           name: name,
           image: image,
           questions: questions,
+          questionIds: questionIds,
         );
 
   @override
@@ -133,6 +145,7 @@ class _CategoryImpl extends Category {
     String? name,
     Object? image = _Undefined,
     Object? questions = _Undefined,
+    Object? questionIds = _Undefined,
   }) {
     return Category(
       id: id is int? ? id : this.id,
@@ -141,6 +154,9 @@ class _CategoryImpl extends Category {
       questions: questions is List<_i2.CategoryQuestion>?
           ? questions
           : this.questions?.clone(),
+      questionIds: questionIds is List<String>?
+          ? questionIds
+          : this.questionIds?.clone(),
     );
   }
 }

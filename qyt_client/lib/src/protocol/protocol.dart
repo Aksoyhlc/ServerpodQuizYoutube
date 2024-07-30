@@ -24,8 +24,9 @@ import 'quiz_result/quiz_result.dart' as _i12;
 import 'quiz_result/quiz_result_type.dart' as _i13;
 import 'user.dart' as _i14;
 import 'protocol.dart' as _i15;
-import 'package:qyt_client/src/protocol/question.dart' as _i16;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i17;
+import 'package:qyt_client/src/protocol/category/category.dart' as _i16;
+import 'package:qyt_client/src/protocol/question.dart' as _i17;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i18;
 export 'category/category.dart';
 export 'category/category_question.dart';
 export 'db_exception.dart';
@@ -139,6 +140,11 @@ class Protocol extends _i1.SerializationManager {
               .toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<String>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<String>(e)).toList()
+          : null) as dynamic;
+    }
     if (t == _i1.getType<List<_i15.CategoryQuestion>?>()) {
       return (data != null
           ? (data as List)
@@ -160,13 +166,18 @@ class Protocol extends _i1.SerializationManager {
               .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i16.Question>?>()) {
+    if (t == _i1.getType<List<_i16.Category>?>()) {
       return (data != null
-          ? (data as List).map((e) => deserialize<_i16.Question>(e)).toList()
+          ? (data as List).map((e) => deserialize<_i16.Category>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i17.Question>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i17.Question>(e)).toList()
           : null) as dynamic;
     }
     try {
-      return _i17.Protocol().deserialize<T>(data, t);
+      return _i18.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -174,7 +185,7 @@ class Protocol extends _i1.SerializationManager {
   @override
   String? getClassNameForObject(Object data) {
     String? className;
-    className = _i17.Protocol().getClassNameForObject(data);
+    className = _i18.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
@@ -224,7 +235,7 @@ class Protocol extends _i1.SerializationManager {
   dynamic deserializeByClassName(Map<String, dynamic> data) {
     if (data['className'].startsWith('serverpod_auth.')) {
       data['className'] = data['className'].substring(15);
-      return _i17.Protocol().deserializeByClassName(data);
+      return _i18.Protocol().deserializeByClassName(data);
     }
     if (data['className'] == 'Category') {
       return deserialize<_i2.Category>(data['data']);

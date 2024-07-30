@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:qyt_flutter/Const/const.dart';
 import 'package:qyt_flutter/Extensions/context.dart';
 import 'package:qyt_flutter/Mixins/state_tools.dart';
+import 'package:qyt_flutter/Views/Admin/Category/add_edit.dart';
+import 'package:qyt_flutter/Views/Admin/Category/list.dart';
 import 'package:qyt_flutter/Views/Admin/Question/add_edit.dart';
 import 'package:qyt_flutter/Views/Admin/Question/list.dart';
 
@@ -32,6 +34,10 @@ class _SubMenuItemState extends State<SubMenuItem> with StateTools {
             context.to(const QuestionCrud());
           } else if (widget.name == "questionList") {
             context.to(const QuestionList());
+          } else if (widget.name == "categoryAdd") {
+            context.to(const CategoryCrud());
+          } else if (widget.name == "categoryList") {
+            context.to(const AdminCategoryList());
           }
         },
         child: Container(
@@ -41,8 +47,7 @@ class _SubMenuItemState extends State<SubMenuItem> with StateTools {
               Expanded(
                 child: Text(
                   widget.title,
-                  style:
-                      GoogleFonts.quicksand(color: primaryColor, fontSize: 15),
+                  style: GoogleFonts.quicksand(color: primaryColor, fontSize: 15),
                 ),
               ),
               const Icon(

@@ -1,49 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:qyt_client/qyt_client.dart';
 import 'package:qyt_flutter/Const/const.dart';
-import 'package:qyt_flutter/Controllers/Database/question_controller.dart';
+import 'package:qyt_flutter/Controllers/Database/category_controller.dart';
 import 'package:qyt_flutter/Extensions/context.dart';
 import 'package:qyt_flutter/Extensions/num.dart';
 import 'package:qyt_flutter/Helpers/ext.dart';
 import 'package:qyt_flutter/Mixins/state_tools.dart';
 import 'package:qyt_flutter/Models/table_model.dart';
-import 'package:qyt_flutter/Views/Admin/Question/add_edit.dart';
+import 'package:qyt_flutter/Views/Admin/Question/list.dart';
 import 'package:qyt_flutter/Views/Widgets/confirm_dialog.dart';
 import 'package:qyt_flutter/Views/Widgets/custom_button.dart';
 import 'package:qyt_flutter/Views/Widgets/future_builder_handling.dart';
 import 'package:qyt_flutter/Views/Widgets/global_app_bar.dart';
 import 'package:qyt_flutter/Views/Widgets/table_widget.dart';
 
-class QuestionList extends StatefulWidget {
-  const QuestionList({super.key, this.category, this.quiz});
-  final Category? category;
-  final Quiz? quiz;
+import 'add_edit.dart';
+
+class AdminCategoryList extends StatefulWidget {
+  const AdminCategoryList({super.key});
 
   @override
-  State<QuestionList> createState() => _QuestionListState();
+  State<AdminCategoryList> createState() => _AdminCategoryListState();
 }
 
-class _QuestionListState extends State<QuestionList> with StateTools {
-  final qc = QuestionDbController();
-  (List<Question>?, DbException?) data = (null, null);
+class _AdminCategoryListState extends State<AdminCategoryList> with StateTools {
+  final cc = CategoryController();
+  (List<Category>?, DbException?) data = (null, null);
 
   fetchData({bool direct = false}) async {
-    if (direct) {
-      data = await action();
-      data = await qc.getAll(categoryId: widget.category?.id, quizId: widget.quiz?.id);
+    if (!direct) {
+      data = await cc.getAll();
       return;
     }
-    data = await run(() => qc.getAll(categoryId: widget.category?.id, quizId: widget.quiz?.id));
-    data = await run(() => action());
-  }
-
-  action() {
-    return qc.getAll();
-  }
-
-  Future<void> refresh() async {
-    await fetchData(direct: true);
-    setState(() {});
+    data = await run(() => cc.getAll());
   }
 
   @override
@@ -52,15 +41,14 @@ class _QuestionListState extends State<QuestionList> with StateTools {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            await context.to(const QuestionCrud());
+            await context.to(const CategoryCrud());
             await refresh();
           },
           child: const Icon(Icons.add),
         ),
         body: Column(
           children: [
-            GlobalAppBar(title: titleGenerate()),
-            10.h,
+            const GlobalAppBar(title: "Category List"),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -68,43 +56,34 @@ class _QuestionListState extends State<QuestionList> with StateTools {
                   future: fetchData(),
                   builder: (context, snapshot) {
                     return FutureBuilderHandling(
-                      data: data,
                       snapshot: snapshot,
+                      data: data,
                       success: () {
+                        //var list = data.$1!;
+
                         var list = data.$1!;
+
                         List<TableColumnModel> columns = [
-                          TableColumnModel(title: "Question"),
-                          TableColumnModel(title: "A"),
-                          TableColumnModel(title: "B"),
-                          TableColumnModel(title: "C"),
-                          TableColumnModel(title: "D"),
-                          TableColumnModel(title: "Answer"),
-                          TableColumnModel(title: "Point"),
+                          TableColumnModel(title: "Name"),
+                          TableColumnModel(title: "Question Count"),
                           TableColumnModel(title: "Action", type: ColType.Widget),
                         ];
 
                         List<TableRowModel> rows = [];
-
                         int index = -1;
-
-                        for (var e in list) {
+                        for (var el in list) {
                           rows.add(
                             TableRowModel(
                               cells: [
-                                TableCellModel(data: e.content),
-                                TableCellModel(data: e.a),
-                                TableCellModel(data: e.b),
-                                TableCellModel(data: e.c),
-                                TableCellModel(data: e.d),
-                                TableCellModel(data: e.answer),
-                                TableCellModel(data: e.point.toString()),
+                                TableCellModel(data: el.name),
+                                TableCellModel(data: el.questions?.length.toString()),
                                 TableCellModel(
                                   data: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       CustomButton(
                                         onTap: () async {
-                                          await context.to(QuestionCrud(question: e));
+                                          await context.to(CategoryCrud(category: el));
                                           await refresh();
                                         },
                                         bgColor: greenColor,
@@ -115,9 +94,9 @@ class _QuestionListState extends State<QuestionList> with StateTools {
                                         onTap: () async {
                                           confirmDialog(
                                               context: context,
-                                              message: "Are you sure you want to delete this question?",
+                                              message: "Are you sure you want to delete?",
                                               onConfirm: () async {
-                                                var result = await qc.delete(e);
+                                                var result = await cc.delete(el);
                                                 if (result.$2 != null) {
                                                   bottomMessage(context, result.$2!.message);
                                                 } else {
@@ -130,7 +109,15 @@ class _QuestionListState extends State<QuestionList> with StateTools {
                                               });
                                         },
                                         bgColor: redColor,
-                                        icon: Icons.delete_forever_outlined,
+                                        icon: Icons.delete,
+                                      ),
+                                      10.w,
+                                      CustomButton(
+                                        onTap: () async {
+                                          await context.to(QuestionList(category: el));
+                                        },
+                                        bgColor: blueColor,
+                                        icon: Icons.list_alt_outlined,
                                       ),
                                     ],
                                   ),
@@ -155,15 +142,8 @@ class _QuestionListState extends State<QuestionList> with StateTools {
     );
   }
 
-  String titleGenerate() {
-    String title = "Question List";
-
-    if (widget.quiz != null) {
-      title = "Quiz: ${widget.quiz?.title}";
-    } else if (widget.category != null) {
-      title = "Category: ${widget.category?.name}";
-    }
-
-    return title;
+  Future<void> refresh() async {
+    await fetchData(direct: true);
+    setState(() {});
   }
 }

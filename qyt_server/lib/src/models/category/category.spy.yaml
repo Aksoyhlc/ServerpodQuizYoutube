@@ -4,3 +4,4 @@ fields:
   name: String
   image: String?
   questions: List<CategoryQuestion>?, relation(name=category_questions)
+  questionIds: List<String>?, !persist

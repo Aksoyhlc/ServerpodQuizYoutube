@@ -3,9 +3,7 @@ import 'package:qyt_flutter/Controllers/Database/db_controller.dart';
 import 'package:qyt_flutter/Mixins/db_helper.dart';
 import 'package:qyt_flutter/Mixins/state_tools.dart';
 
-class QuestionDbController
-    with DbHelper, StateTools
-    implements DbController<Question> {
+class QuestionDbController with DbHelper, StateTools implements DbController<Question> {
   @override
   Future<(Question?, DbException?)> add(Question data) async {
     return await handleAction(() => gc.client.question.add(data));
@@ -17,10 +15,9 @@ class QuestionDbController
   }
 
   @override
-  Future<(List<Question>?, DbException?)> getAll(
-      {int? limit, int? offset}) async {
+  Future<(List<Question>?, DbException?)> getAll({int? limit, int? offset, int? categoryId, int? quizId}) async {
     return await handleAction(
-      () => gc.client.question.getAll(limit: limit, offset: offset),
+      () => gc.client.question.getAll(limit: limit, offset: offset, categoryId: categoryId, quizId: quizId),
     );
   }
 
